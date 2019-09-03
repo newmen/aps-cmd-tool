@@ -69,6 +69,12 @@
          body-opts (assoc json-opts :body body)]
      (http/request body-opts))))
 
+(defn parse-body
+  [body]
+  (try
+    (parse-string body)
+    (catch Exception e body)))
+
 (defn highlight-aps-response
   [args]
   (let [error (:error cached-aps-token-and-uri)]
@@ -77,7 +83,7 @@
       (let [promise (apply do-aps-request args)
             response @promise
             status (:status response)
-            body (parse-string (:body response))
+            body (parse-body (:body response))
             answer {:status status :answer body}
             pretty-json (generate-string answer {:pretty true})]
         (if status
