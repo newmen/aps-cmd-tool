@@ -1,0 +1,3 @@
+#!/bin/sh
+
+java -jar $HOME/projects/clojure/aps/target/aps-0.1.0-SNAPSHOT-standalone.jar $@ | pygmentize -l json

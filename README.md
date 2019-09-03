@@ -1,10 +1,24 @@
-# aps
+# aps-cmd-tool
 
-A Clojure library designed to ... well, that part is up to you.
+A tool to interact with APS Bus of Odin Automation
 
 ## Usage
 
-FIXME
+First, you must setup an environment variable to define a host with Odin Automation
+
+```
+$ export OA='10.254.252.42'
+```
+
+Then you can request APS Bus with commands like
+
+```
+$ aps get resources
+```
+
+```
+$ aps get resources/2f9fd3ee-6047-442d-be72-737151967c08/livenessProbe
+```
 
 ## License
 
