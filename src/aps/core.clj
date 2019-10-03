@@ -1,5 +1,6 @@
 (ns aps.core
   (:require [clojure.java.io :as io]
+            [clojure.string :as str]
             [org.httpkit.client :as http]
             [cheshire.core :refer [parse-string generate-string]]
             [clj-xpath.core :refer [$x $x:text]])
@@ -60,13 +61,23 @@
    :insecure? true
    :headers {"APS-Token" (:aps_token cached-aps-token-and-uri)}})
 
+(defn file?
+  [body]
+  (str/starts-with? body "@"))
+
+(defn reread-body
+  [body]
+  (if (file? body)
+    (slurp (subs body 1))
+    body))
+
 (defn do-aps-request
   ([method path]
    (http/request (aps-request-common-opts method path)))
   ([method path body]
    (let [common-opts (aps-request-common-opts method path)
          json-opts (assoc-in common-opts [:headers "Content-Type"] "application/json")
-         body-opts (assoc json-opts :body body)]
+         body-opts (assoc json-opts :body (reread-body body))]
      (http/request body-opts))))
 
 (defn parse-body
